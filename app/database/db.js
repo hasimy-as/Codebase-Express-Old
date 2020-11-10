@@ -14,7 +14,7 @@ const mongoConnect = () => {
 		logger.log(
 			'app on status ' +
 				CODE.BAD_GATEWAY +
-				'which is ' +
+				' which is ' +
 				STATUS.BAD_GATEWAY,
 			error,
 			'not connected',
