@@ -31,9 +31,13 @@ Fourthly, run the app and visit localhost:5000/
 Root: localhost:5000/
 
 GET: localhost:5000/api/users
+
 POST: localhost:5000/api/users
+
 PUT: localhost:5000/api/users/:id
+
 DELETE: localhost:5000/api/users/:id
+
 GET BY ID: localhost:5000/api/users/:id
 
 ## Licensed under [MIT](https://raw.githubusercontent.com/hasimy-as/TalkAway/master/LICENSE)
