@@ -10,8 +10,7 @@ A project template using Express.js as a Node.js framework.
 
 ## Version
 
-Current app version is on v1.0
-Updating with unit tests.
+Current app version is on v1.0, updating with unit tests.
 
 ## Usage
 
