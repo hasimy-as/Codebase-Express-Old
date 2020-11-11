@@ -13,32 +13,36 @@ A project template using Express.js as a Node.js framework.
 Current app version is on v1.0
 Updating with unit tests.
 
-## Installation
+## Usage
 
 ```
-First off, you need to download the files in this repository, or clone it with command (git clone "url").
+# Install dependencies
+npm install
+yarn install
 
-Secondly, change directory to the app and run the command npm install.
+# Run in development
+npm run dev
 
-Thirtly, run mongod.
+# Run in production
+npm start
 
-Fourthly, run the app and visit localhost:5000/
+# Initialize mongodb
+mongod
 
 ```
 
 ## Endpoints
 
-Root: localhost:5000/
+```
+# Routes
+ROOT      localhost:5000/
+POST      localhost:5000/api/users
+GET       localhost:5000/api/users
+GET       localhost:5000/api/users/:id
+PUT       localhost:5000/api/users/:id
+DELETE    localhost:5000/api/users/:id
 
-GET: localhost:5000/api/users
-
-POST: localhost:5000/api/users
-
-PUT: localhost:5000/api/users/:id
-
-DELETE: localhost:5000/api/users/:id
-
-GET BY ID: localhost:5000/api/users/:id
+```
 
 ## Licensed under [MIT](https://raw.githubusercontent.com/hasimy-as/TalkAway/master/LICENSE)
 
