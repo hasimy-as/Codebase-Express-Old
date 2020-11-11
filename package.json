@@ -36,6 +36,24 @@
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
-    "nodemon": "^2.0.6"
+    "istanbul": "^0.4.5",
+    "nodemon": "^2.0.6",
+    "nyc": "^15.1.0"
+  },
+  "nyc": {
+    "lines": 80,
+    "statements": 80,
+    "functions": 80,
+    "branches": 80,
+    "check-coverage": true,
+    "reporter": [
+      "html",
+      "text",
+      "lcov",
+      "text-summary"
+    ],
+    "all": true,
+    "cache": true,
+    "report-dir": "./coverage"
   }
 }
