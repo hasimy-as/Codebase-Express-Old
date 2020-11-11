@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const mongoConnect = require('../database/db');
 const userController = require('../controllers/userSubController');
+
+mongoConnect();
 
 router
 	.get('/api/users', userController.getUsers)
