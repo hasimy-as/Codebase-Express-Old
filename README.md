@@ -17,13 +17,16 @@ Current app version is on v1.0, updating with unit tests.
 ```
 # Install dependencies
 npm install
-yarn install
 
 # Run in development
 npm run dev
 
 # Run in production
 npm start
+
+# Unit/Integration testing
+npm run test
+npm run cover // To create a HTML report
 
 # Initialize mongodb
 mongod
