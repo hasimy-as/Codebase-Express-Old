@@ -26,10 +26,14 @@ npm start
 
 # Unit/Integration testing
 npm run test
-npm run cover // To create a HTML report
+npm run cover // To create a coverage report
 
 # Initialize mongodb
 mongod
+
+# Pro tip
+When unit testing, be sure to initialize mongodb first
+so the database-related section can be tested.
 
 ```
 
