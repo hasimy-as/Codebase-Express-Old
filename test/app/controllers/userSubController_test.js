@@ -33,7 +33,7 @@ describe('Controllers', () => {
 	 * */
 	it('should able to get a single user', (done) => {
 		request(app)
-			.get('/api/users/5fa57df98ccd0415cf489d9c')
+			.get('/api/users/:id') // Change the ID here
 			.expect('Content-Type', /json/)
 			.expect(CODE.SUCCESS)
 			.end(done);
