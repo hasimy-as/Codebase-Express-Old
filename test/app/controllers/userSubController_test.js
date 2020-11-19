@@ -48,6 +48,29 @@ describe('Controllers', () => {
 				.expect(CODE.SUCCESS)
 				.end(done);
 		});
+
+		it('should able to get a user', (done) => {
+			let user = {};
+
+			beforeEach(() => {
+				user = payloadCreate;
+			});
+
+			let userSchema = sinon.mock(User);
+
+			userSchema
+				.expects('findOne')
+				.withArgs({ _id: 11234 })
+				.yields(null, user);
+
+			User.findOne({ _id: 11234 }, (err, result) => {
+				userSchema.verify();
+				userSchema.restore();
+				expect(result).to.be.deep.equals(user);
+			});
+
+			done();
+		});
 	});
 
 	describe('Post methods', () => {
