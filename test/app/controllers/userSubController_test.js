@@ -11,6 +11,11 @@ let payloadCreate = {
 	address: 'Seoul, South Korea',
 };
 
+let payloadOne = {
+	name: 'Park Yoo-ra',
+	address: 'Itaewon, South Korea',
+};
+
 describe('Controllers', () => {
 	describe('Get methods', () => {
 		it('should able to get all user', (done) => {
@@ -53,7 +58,7 @@ describe('Controllers', () => {
 			let user = {};
 
 			beforeEach(() => {
-				user = payloadCreate;
+				user = payloadOne;
 			});
 
 			let userSchema = sinon.mock(User);
@@ -95,11 +100,39 @@ describe('Controllers', () => {
 		});
 	});
 
-	describe.skip('Update methods', () => {
+	describe('Update methods', () => {
+		it('should able to update a user', (done) => {
+			let userSchema = sinon.mock(new User(payloadOne));
+			let user = userSchema.object;
 
+			userSchema
+				.expects('save')
+				.withArgs({ _id: 11234 })
+				.yields(null, 'user');
+
+			user.save({ _id: 11234 }, (err, result) => {
+				userSchema.verify();
+				userSchema.restore();
+				done();
+			});
+		});
 	});
 
-	describe.skip('Delete methods', () => {
+	describe('Delete methods', () => {
+		it('should able to delete a user', (done) => {
+			let userSchema = sinon.mock(new User(payloadOne));
+			let user = userSchema.object;
 
+			userSchema
+				.expects('remove')
+				.withArgs({ _id: 11234 })
+				.yields(null, 'delete');
+
+			user.remove({ _id: 11234 }, (err, result) => {
+				userSchema.verify();
+				userSchema.restore();
+				done();
+			});
+		});
 	});
 });

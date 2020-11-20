@@ -20,9 +20,6 @@ describe('Database models', () => {
 				name: 'Park Shin-I',
 				address: 'Seoul, South Korea',
 			};
-			const userSchema = new User(data);
-
-			userSchema.checkForReposts(() => {});
 
 			sinon.assert.calledWith(User.findOne, data);
 		}),
