@@ -10,7 +10,7 @@ A project template using Express.js as a Node.js framework.
 
 ## Version
 
-Current app version is on v1.0, updating with unit tests.
+Current app version is on v1.0.
 
 ## Usage
 
@@ -31,9 +31,13 @@ npm run cover // To create a coverage report
 # Initialize mongodb
 mongod
 
-# Pro tip
-When unit testing, be sure to initialize mongodb first
+# Post scriptum
+- When unit testing, be sure to initialize mongodb first
 so the database-related section can be tested.
+
+- Do not forget to change the controller-test section for
+the :id at line 51 to an existing id of a data on your
+database to ensure the test works properly.
 
 ```
 
@@ -41,16 +45,16 @@ so the database-related section can be tested.
 
 ```
 # Routes
-ROOT      localhost:5000/
-POST      localhost:5000/api/users
-GET       localhost:5000/api/users
-GET       localhost:5000/api/users/:id
-PUT       localhost:5000/api/users/:id
-DELETE    localhost:5000/api/users/:id
+ROOT          localhost:5000/
+POST          localhost:5000/api/users
+GET           localhost:5000/api/users
+GET BY ID     localhost:5000/api/users/:id
+PUT           localhost:5000/api/users/:id
+DELETE        localhost:5000/api/users/:id
 
 ```
 
-## Licensed under [MIT](https://raw.githubusercontent.com/hasimy-as/TalkAway/master/LICENSE)
+## Licensed under [MIT](https://raw.githubusercontent.com/hasimy-as/Expressjs-Project-Template/master/LICENSE)
 
 Happy coding!
 
