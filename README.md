@@ -10,37 +10,51 @@ A project template using Express.js as a Node.js framework.
 
 ## Version
 
-Current app version is on v1.0
+Current app version is on v1.0.
 
-
-## Installation
+## Usage
 
 ```
-First off, you need to download the files in this repository, or clone it with command (git clone "url").
+# Install dependencies
+npm install
 
-Secondly, change directory to the app and run the command npm install.
+# Run in development
+npm run dev
 
-Thirtly, run mongod.
+# Run in production
+npm start
 
-Fourthly, run the app and visit localhost:5000/
+# Unit/Integration testing
+npm run test
+npm run cover // To create a coverage report
+
+# Initialize mongodb
+mongod
+
+# Post scriptum
+- When unit testing, be sure to initialize mongodb first
+so the database-related section can be tested.
+
+- Do not forget to change the controller-test section for
+the :id at line 51 to an existing id of a data on your
+database to ensure the test works properly.
 
 ```
 
 ## Endpoints
 
-Root: localhost:5000/
+```
+# Routes
+ROOT          localhost:5000/
+POST          localhost:5000/api/users
+GET           localhost:5000/api/users
+GET BY ID     localhost:5000/api/users/:id
+PUT           localhost:5000/api/users/:id
+DELETE        localhost:5000/api/users/:id
 
-GET: localhost:5000/api/users
+```
 
-POST: localhost:5000/api/users
-
-PUT: localhost:5000/api/users/:id
-
-DELETE: localhost:5000/api/users/:id
-
-GET BY ID: localhost:5000/api/users/:id
-
-## Licensed under [MIT](https://raw.githubusercontent.com/hasimy-as/TalkAway/master/LICENSE)
+## Licensed under [MIT](https://raw.githubusercontent.com/hasimy-as/Expressjs-Project-Template/master/LICENSE)
 
 Happy coding!
 

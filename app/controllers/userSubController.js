@@ -4,14 +4,14 @@ const { STATUS, CODE } = require('../lib/index.js');
 exports.getUsers = async (req, res) => {
 	try {
 		const users = await User.find();
-		res.json({
+		res.status(CODE.SUCCESS).json({
 			status: STATUS.SUCCESS,
 			message: 'data successfully fetched',
 			data: users,
 			code: CODE.SUCCESS,
 		});
 	} catch (err) {
-		res.json({
+		res.status(CODE.INTERNAL_ERROR).json({
 			status: STATUS.INTERNAL_ERROR,
 			message: err.message,
 			data: null,
@@ -21,7 +21,7 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getOneUser = async (req, res) => {
-	res.json({
+	res.status(CODE.SUCCESS).json({
 		status: STATUS.SUCCESS,
 		message: 'user has been fetched',
 		data: res.user,
@@ -36,14 +36,14 @@ exports.createUser = async (req, res) => {
 	});
 	try {
 		const newUser = await user.save();
-		res.json({
+		res.status(CODE.CREATED).json({
 			status: STATUS.CREATED,
 			message: 'user successfully created',
 			data: newUser,
 			code: CODE.CREATED,
 		});
 	} catch (err) {
-		res.json({
+		res.status(CODE.BAD_REQUEST).json({
 			status: STATUS.BAD_REQUEST,
 			message: err.message,
 			data: null,
@@ -57,14 +57,14 @@ exports.updateUser = async (req, res) => {
 	if (req.body.address !== null) res.user.address = req.body.address;
 	try {
 		const updatedUser = await res.user.save();
-		res.json({
+		res.status(CODE.SUCCESS).json({
 			status: STATUS.SUCCESS,
 			message: 'user successfully updated',
 			data: updatedUser,
 			code: CODE.SUCCESS,
 		});
 	} catch (err) {
-		res.json({
+		res.status(CODE.BAD_REQUEST).json({
 			status: STATUS.BAD_REQUEST,
 			message: err.message,
 			data: null,
@@ -76,14 +76,14 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
 	try {
 		await res.user.remove();
-		res.json({
+		res.status(CODE.SUCCESS).json({
 			status: STATUS.SUCCESS,
 			message: 'user successfully removed',
 			data: null,
 			code: CODE.SUCCESS,
 		});
 	} catch (err) {
-		res.json({
+		res.status(CODE.INTERNAL_ERROR).json({
 			status: STATUS.INTERNAL_ERROR,
 			message: err.message,
 			data: null,
@@ -97,14 +97,14 @@ exports.getUser = async (req, res, next) => {
 	try {
 		user = await User.findById(req.params.id);
 		if (user === null)
-			return res.json({
+			return res.status(CODE.NOT_FOUND).json({
 				status: STATUS.NOT_FOUND,
 				message: 'cannot find user',
 				data: null,
 				code: CODE.NOT_FOUND,
 			});
 	} catch (err) {
-		return res.json({
+		return res.status(CODE.INTERNAL_ERROR).json({
 			status: STATUS.INTERNAL_ERROR,
 			message: err.message,
 			data: null,
