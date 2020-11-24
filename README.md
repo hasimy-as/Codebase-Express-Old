@@ -45,12 +45,12 @@ database to ensure the test works properly.
 
 ```
 # Routes
-ROOT          localhost:5000/
-POST          localhost:5000/api/users
-GET           localhost:5000/api/users
-GET BY ID     localhost:5000/api/users/:id
-PUT           localhost:5000/api/users/:id
-DELETE        localhost:5000/api/users/:id
+ROOT          {{url}}/
+POST          {{url}}/api/users
+GET           {{url}}/api/users
+GET BY ID     {{url}}/api/users/:id
+PUT           {{url}}/api/users/:id
+DELETE        {{url}}/api/users/:id
 
 ```
 
