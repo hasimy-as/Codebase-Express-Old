@@ -1,10 +1,10 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 
-const User = require('../../../app/models/User');
+const User = require('../../../../app/models/User');
 const userSchema = new User();
 
-describe('Database models', () => {
+describe('Unit db models', () => {
 	it('should invalid if name or address is empty', (done) => {
 		userSchema.validate((err) => {
 			expect(err.name || err.address).to.exist;

@@ -1,10 +1,9 @@
-const request = require('supertest');
+
 const sinon = require('sinon');
 const { expect } = require('chai');
 
-const { CODE } = require('../../../app/lib/index');
-const User = require('../../../app/models/User');
-const app = require('../../../server');
+const { CODE } = require('../../../../app/lib/index');
+const User = require('../../../../app/models/User');
 
 let payloadCreate = {
 	name: 'Park Shin-I',
@@ -16,16 +15,8 @@ let payloadOne = {
 	address: 'Itaewon, South Korea',
 };
 
-describe('Controllers', () => {
+describe('Unit controllers', () => {
 	describe('Get methods', () => {
-		it('should able to get all user', (done) => {
-			request(app)
-				.get('/api/users')
-				.expect('Content-Type', /json/)
-				.expect(CODE.SUCCESS)
-				.end(done);
-		});
-
 		it('successfully receive users from database', (done) => {
 			let userSchema = sinon.mock(User);
 			let expectedResult = [];
@@ -39,19 +30,6 @@ describe('Controllers', () => {
 
 				done();
 			});
-		});
-
-		/**
-		 * @info
-		 * The ID parameter below must be changed to an
-		 * ID of an existing data in your database
-		 * */
-		it('should able to get a single user', (done) => {
-			request(app)
-				.get('/api/users/:id') // Change the ID here
-				.expect('Content-Type', /json/)
-				.expect(CODE.SUCCESS)
-				.end(done);
 		});
 
 		it('should able to get a user', (done) => {

@@ -1,8 +1,8 @@
 const request = require('supertest');
-const { CODE } = require('../app/lib/index');
-const app = require('../server');
+const { CODE } = require('../../app/lib/index');
+const app = require('../../server');
 
-describe('Main server', () => {
+describe('Integration main server', () => {
 	it('should return success code in accessing root', (done) => {
 		request(app)
 			.get('/')
