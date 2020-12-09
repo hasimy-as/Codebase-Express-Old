@@ -10,7 +10,7 @@ A project template using Express.js as a Node.js framework.
 
 ## Version
 
-Current app version is on v1.0.
+Current app version is on v1.1.
 
 ## Usage
 
@@ -37,7 +37,7 @@ so the database-related section can be tested.
 
 - Do not forget to change the controller-test section for
 the :id at line 51 to an existing id of a data on your
-database to ensure the test works properly.
+database to ensure the integration test works properly.
 
 ```
 
