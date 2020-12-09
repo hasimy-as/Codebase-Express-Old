@@ -1,9 +1,9 @@
 const sinon = require('sinon');
 const winston = require('winston');
 
-const logger = require('../../../app/lib/logger');
+const logger = require('../../../../app/lib/logger');
 
-describe('Logger test', () => {
+describe('Unit logger', () => {
   beforeEach(() => {
     sinon.stub(winston, 'createLogger').resolves({
       info: sinon.stub(),
