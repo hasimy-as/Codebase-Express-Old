@@ -1,117 +1,99 @@
 const User = require('../models/User');
-const { STATUS, CODE } = require('../lib/index.js');
+const { CODE } = require('../lib/index.js');
 
-exports.getUsers = async (req, res) => {
-	try {
+class UserController {
+	getUsers = async (req, res) => {
 		const users = await User.find();
+		if (users.err) {
+			res.status(CODE.INTERNAL_ERROR).json({
+				message: err.message,
+				data: null,
+			});
+		}
 		res.status(CODE.SUCCESS).json({
-			status: STATUS.SUCCESS,
 			message: 'data successfully fetched',
 			data: users,
-			code: CODE.SUCCESS,
 		});
-	} catch (err) {
-		res.status(CODE.INTERNAL_ERROR).json({
-			status: STATUS.INTERNAL_ERROR,
-			message: err.message,
-			data: null,
-			code: CODE.INTERNAL_ERROR,
+	};
+
+	getOneUser = async (req, res) => {
+		res.status(CODE.SUCCESS).json({
+			message: 'user has been fetched',
+			data: res.user,
 		});
-	}
-};
+	};
 
-exports.getOneUser = async (req, res) => {
-	res.status(CODE.SUCCESS).json({
-		status: STATUS.SUCCESS,
-		message: 'user has been fetched',
-		data: res.user,
-		code: CODE.SUCCESS,
-	});
-};
+	createUser = async (req, res) => {
+		const user = new User({
+			name: req.body.name,
+			address: req.body.address,
+		});
 
-exports.createUser = async (req, res) => {
-	const user = new User({
-		name: req.body.name,
-		address: req.body.address,
-	});
-	try {
 		const newUser = await user.save();
+		if (newUser.errors) {
+			res.status(CODE.BAD_REQUEST).json({
+				message: err.message,
+				data: null,
+			});
+		}
+
 		res.status(CODE.CREATED).json({
-			status: STATUS.CREATED,
 			message: 'user successfully created',
 			data: newUser,
-			code: CODE.CREATED,
 		});
-	} catch (err) {
-		res.status(CODE.BAD_REQUEST).json({
-			status: STATUS.BAD_REQUEST,
-			message: err.message,
-			data: null,
-			code: CODE.BAD_REQUEST,
-		});
-	}
-};
+	};
 
-exports.updateUser = async (req, res) => {
-	if (req.body.name !== null) res.user.name = req.body.name;
-	if (req.body.address !== null) res.user.address = req.body.address;
-	try {
+	updateUser = async (req, res) => {
+		if (req.body.name !== null) res.user.name = req.body.name;
+		if (req.body.address !== null) res.user.address = req.body.address;
+
 		const updatedUser = await res.user.save();
+		if (updatedUser.err) {
+			res.status(CODE.BAD_REQUEST).json({
+				message: err.message,
+				data: null,
+			});
+		}
+
 		res.status(CODE.SUCCESS).json({
-			status: STATUS.SUCCESS,
 			message: 'user successfully updated',
 			data: updatedUser,
-			code: CODE.SUCCESS,
 		});
-	} catch (err) {
-		res.status(CODE.BAD_REQUEST).json({
-			status: STATUS.BAD_REQUEST,
-			message: err.message,
-			data: null,
-			code: CODE.BAD_REQUEST,
-		});
-	}
-};
+	};
 
-exports.deleteUser = async (req, res) => {
-	try {
-		await res.user.remove();
-		res.status(CODE.SUCCESS).json({
-			status: STATUS.SUCCESS,
-			message: 'user successfully removed',
-			data: null,
-			code: CODE.SUCCESS,
-		});
-	} catch (err) {
-		res.status(CODE.INTERNAL_ERROR).json({
-			status: STATUS.INTERNAL_ERROR,
-			message: err.message,
-			data: null,
-			code: CODE.INTERNAL_ERROR,
-		});
-	}
-};
-
-exports.getUser = async (req, res, next) => {
-	let user;
-	try {
-		user = await User.findById(req.params.id);
-		if (user === null)
-			return res.status(CODE.NOT_FOUND).json({
-				status: STATUS.NOT_FOUND,
-				message: 'cannot find user',
+	deleteUser = async (req, res, err) => {
+		if (await res.user.remove()) {
+			res.status(CODE.SUCCESS).json({
+				message: 'user successfully removed',
 				data: null,
-				code: CODE.NOT_FOUND,
 			});
-	} catch (err) {
-		return res.status(CODE.INTERNAL_ERROR).json({
-			status: STATUS.INTERNAL_ERROR,
-			message: err.message,
-			data: null,
-			code: CODE.INTERNAL_ERROR,
-		});
-	}
+		} else if (err) {
+			res.status(CODE.INTERNAL_ERROR).json({
+				message: err.message,
+				data: null,
+			});
+		}
+	};
 
-	res.user = user;
-	next();
-};
+	getUser = async (req, res, next) => {
+		let user;
+		try {
+			user = await User.findById(req.params.id);
+			if (user === null)
+				return res.status(CODE.NOT_FOUND).json({
+					message: 'cannot find user',
+					data: null,
+				});
+		} catch (err) {
+			return res.status(CODE.INTERNAL_ERROR).json({
+				message: err.message,
+				data: null,
+			});
+		}
+
+		res.user = user;
+		next();
+	};
+}
+
+module.exports = UserController;
