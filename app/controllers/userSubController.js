@@ -2,9 +2,9 @@ const User = require('../models/User');
 const { CODE } = require('../lib/index.js');
 
 class UserController {
-	getUsers = async (req, res) => {
+	getUsers = async (req, res, err) => {
 		const users = await User.find();
-		if (users.err) {
+		if (err) {
 			res.status(CODE.INTERNAL_ERROR).json({
 				message: err.message,
 				data: null,
@@ -23,14 +23,14 @@ class UserController {
 		});
 	};
 
-	createUser = async (req, res) => {
+	createUser = async (req, res, err) => {
 		const user = new User({
 			name: req.body.name,
 			address: req.body.address,
 		});
 
 		const newUser = await user.save();
-		if (newUser.errors) {
+		if (err) {
 			res.status(CODE.BAD_REQUEST).json({
 				message: err.message,
 				data: null,
@@ -43,12 +43,12 @@ class UserController {
 		});
 	};
 
-	updateUser = async (req, res) => {
+	updateUser = async (req, res, err) => {
 		if (req.body.name !== null) res.user.name = req.body.name;
 		if (req.body.address !== null) res.user.address = req.body.address;
 
 		const updatedUser = await res.user.save();
-		if (updatedUser.err) {
+		if (err) {
 			res.status(CODE.BAD_REQUEST).json({
 				message: err.message,
 				data: null,
