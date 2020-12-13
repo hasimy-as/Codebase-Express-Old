@@ -1,9 +1,12 @@
 
 const sinon = require('sinon');
-const { expect } = require('chai');
+const assert = require('assert');
 
 const { CODE } = require('../../../../app/lib/index');
 const User = require('../../../../app/models/User');
+const UserController = require('../../../../app/controllers/userSubController');
+
+const user = new UserController();
 
 let payloadCreate = {
 	name: 'Park Shin-I',
@@ -17,47 +20,40 @@ let payloadOne = {
 
 describe('Unit controllers', () => {
 	describe('Get methods', () => {
-		it('successfully receive users from database', (done) => {
-			let userSchema = sinon.mock(User);
-			let expectedResult = [];
-
-			userSchema.expects('find').yields(null, expectedResult);
-
-			User.find((err, result) => {
-				userSchema.verify();
-				userSchema.restore();
-				expect(result).to.be.an('array').empty;
-
-				done();
-			});
+		it('successfully receive users from database', async () => {
+			sinon.stub(User, 'find').resolves(payloadOne);
+			const res = await user.getUsers(payloadOne);
+			assert.equal(res.status, CODE.SUCCESS);
+			assert.equal(res.message, 'data successfully fetched');
+      assert.equal(res.data, payloadOne);
+			User.find.restore();
 		});
 
-		it('should able to get a user', (done) => {
+		it('should able to get a user', () => {
 			let user = {};
 
 			beforeEach(() => {
-				user = payloadOne;
+				user = payloa;
 			});
 
 			let userSchema = sinon.mock(User);
 
 			userSchema
-				.expects('findOne')
+				.expects('fin')
 				.withArgs({ _id: 11234 })
 				.yields(null, user);
 
-			User.findOne({ _id: 11234 }, (err, result) => {
+			User.fin({ _id: 11234 }, (err, result) => {
 				userSchema.verify();
 				userSchema.restore();
 				expect(result).to.be.deep.equals(user);
 			});
 
-			done();
 		});
 	});
 
 	describe('Post methods', () => {
-		it('should able to create new user', (done) => {
+		it('should able to create new user', () => {
 			var user = new User(payloadCreate);
 
 			var req = { body: { name: 'name', address: 'address' } };
@@ -73,14 +69,13 @@ describe('Unit controllers', () => {
 				userSchema.restore();
 				expect(result).to.be.equal(user);
 				expect(CODE.SUCCESS);
-				done();
 			});
 		});
 	});
 
 	describe('Update methods', () => {
-		it('should able to update a user', (done) => {
-			let userSchema = sinon.mock(new User(payloadOne));
+		it('should able to update a user', () => {
+			let userSchema = sinon.mock(new User(payloa));
 			let user = userSchema.object;
 
 			userSchema
@@ -91,14 +86,13 @@ describe('Unit controllers', () => {
 			user.save({ _id: 11234 }, (err, result) => {
 				userSchema.verify();
 				userSchema.restore();
-				done();
 			});
 		});
 	});
 
 	describe('Delete methods', () => {
-		it('should able to delete a user', (done) => {
-			let userSchema = sinon.mock(new User(payloadOne));
+		it('should able to delete a user', () => {
+			let userSchema = sinon.mock(new User(payloa));
 			let user = userSchema.object;
 
 			userSchema
@@ -109,7 +103,6 @@ describe('Unit controllers', () => {
 			user.remove({ _id: 11234 }, (err, result) => {
 				userSchema.verify();
 				userSchema.restore();
-				done();
 			});
 		});
 	});
