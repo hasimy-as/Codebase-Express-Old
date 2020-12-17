@@ -20,7 +20,7 @@ describe('Integration controllers', () => {
 		 * */
 		it('should able to get a single user', (done) => {
 			request(app)
-				.get('/api/users/:id') // Change the ID here
+				.get('/api/users/5fd631daf73d8295658f4a6e') // Change the ID here
 				.expect('Content-Type', /json/)
 				.expect(CODE.SUCCESS)
 				.end(done);

@@ -1,116 +1,111 @@
-
 const sinon = require('sinon');
-const { expect } = require('chai');
+const assert = require('assert');
 
+const UserController = require('../../../../app/controllers/userSubController');
 const { CODE } = require('../../../../app/lib/index');
 const User = require('../../../../app/models/User');
 
-let payloadCreate = {
-	name: 'Park Shin-I',
-	address: 'Seoul, South Korea',
-};
+const userApp = new UserController();
 
-let payloadOne = {
-	name: 'Park Yoo-ra',
-	address: 'Itaewon, South Korea',
-};
+let payloadUsers;
+let payloadEmpty;
+let resIntErr;
+let res;
+let req;
 
 describe('Unit controllers', () => {
+	beforeEach(() => {
+		payloadUsers = [
+			{
+				name: 'Developer',
+				address: 'Indonesia',
+			},
+			{
+				name: 'Maintainer',
+				address: 'South Korea',
+			},
+		];
+		payloadEmpty = [{}, {}];
+		req = {
+			params: { id: '5fd99e41366333a1751e4069' },
+			body: {
+				name: 'Park Yoo-ra',
+				address: 'Itaewon, South Korea',
+			},
+		};
+		res = {
+			json: function () {},
+			status: function (responseStatus) {
+				assert.equal(responseStatus, CODE.SUCCESS);
+				return this;
+			},
+		};
+		resIntErr = {
+			json: function () {},
+			status: function (responseStatus) {
+				assert.equal(responseStatus, CODE.INTERNAL_ERROR);
+				return this;
+			},
+		};
+	});
+
 	describe('Get methods', () => {
-		it('successfully receive users from database', (done) => {
-			let userSchema = sinon.mock(User);
-			let expectedResult = [];
-
-			userSchema.expects('find').yields(null, expectedResult);
-
-			User.find((err, result) => {
-				userSchema.verify();
-				userSchema.restore();
-				expect(result).to.be.an('array').empty;
-
-				done();
-			});
+		it('successfully receive users from database', () => {
+			const req = {
+				params: {},
+			};
+			sinon.stub(User, 'find').resolves(payloadUsers);
+			userApp.getUsers(req, res);
+			User.find.restore();
 		});
 
-		it('should able to get a user', (done) => {
-			let user = {};
+		it('successfully receive users from database empty', () => {
+			const req = {
+				params: {},
+			};
+			sinon.stub(User, 'find').resolves(payloadEmpty);
+			userApp.getUsers(req, res);
+			User.find.restore();
+		});
 
-			beforeEach(() => {
-				user = payloadOne;
-			});
+		it('error receive users from database', () => {
+			const users = User.find(req.body);
+			sinon.stub(users, 'find').resolves(users.errors === true);
+			userApp.getUsers(req, resIntErr);
+			users.find.restore();
+		});
 
-			let userSchema = sinon.mock(User);
-
-			userSchema
-				.expects('findOne')
-				.withArgs({ _id: 11234 })
-				.yields(null, user);
-
-			User.findOne({ _id: 11234 }, (err, result) => {
-				userSchema.verify();
-				userSchema.restore();
-				expect(result).to.be.deep.equals(user);
-			});
-
-			done();
+		it('should able to get a user', () => {
+			sinon.stub(User, 'findById').resolves(req.body);
+			userApp.getOneUser(req.params.id, res);
+			User.findById.restore();
 		});
 	});
 
 	describe('Post methods', () => {
-		it('should able to create new user', (done) => {
-			var user = new User(payloadCreate);
-
-			var req = { body: { name: 'name', address: 'address' } };
-			var res = {};
-
-			var userSchema = sinon.mock(user);
-			var user = userSchema.object;
-
-			userSchema.expects('save').yields(null, user);
-
-			user.save({ req: req, res: res }, (err, result) => {
-				userSchema.verify();
-				userSchema.restore();
-				expect(result).to.be.equal(user);
-				expect(CODE.SUCCESS);
-				done();
-			});
+		it('should able to create new user', () => {
+			const data = new User(req.body);
+			sinon.stub(data, 'save').resolves(req);
+			userApp.createUser(req, res);
+			data.save.restore();
 		});
 	});
 
 	describe('Update methods', () => {
-		it('should able to update a user', (done) => {
-			let userSchema = sinon.mock(new User(payloadOne));
-			let user = userSchema.object;
-
-			userSchema
-				.expects('save')
-				.withArgs({ _id: 11234 })
-				.yields(null, 'user');
-
-			user.save({ _id: 11234 }, (err, result) => {
-				userSchema.verify();
-				userSchema.restore();
-				done();
-			});
+		it('should able to update a user', () => {
+			const updateData = new User(req.body);
+			sinon.stub(updateData, 'save').resolves(req);
+			userApp.updateUser(req, res);
+			updateData.save.restore();
 		});
 	});
 
 	describe('Delete methods', () => {
-		it('should able to delete a user', (done) => {
-			let userSchema = sinon.mock(new User(payloadOne));
-			let user = userSchema.object;
-
-			userSchema
-				.expects('remove')
-				.withArgs({ _id: 11234 })
-				.yields(null, 'delete');
-
-			user.remove({ _id: 11234 }, (err, result) => {
-				userSchema.verify();
-				userSchema.restore();
-				done();
-			});
+		it('should able to delete a user', () => {
+			const data = new User(req.body);
+			sinon.stub(data, 'remove').resolves(req);
+			userApp.deleteUser(req, res);
+			data.remove.restore();
 		});
 	});
 });
