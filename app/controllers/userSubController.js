@@ -1,17 +1,19 @@
 const User = require('../models/User');
+const logger = require('../lib/logger');
 const { CODE } = require('../lib/index.js');
 
 class UserController {
 	getUsers = async (req, res) => {
 		const users = await User.find();
 		if (users.err) {
+			logger.log('app-err', 'Application error', users.err);
 			res.status(CODE.INTERNAL_ERROR).json({
 				message: err.message,
 				data: null,
 			});
 		}
 		res.status(CODE.SUCCESS).json({
-			message: 'data successfully fetched',
+			message: 'Success fetching users',
 			data: users,
 		});
 	};
@@ -21,12 +23,12 @@ class UserController {
 		let user = await User.findById(userId);
 		if (user === null) {
 			return res.status(CODE.NOT_FOUND).json({
-				message: 'cannot find user',
+				message: 'User not found',
 				data: null,
 			});
 		}
 		res.status(CODE.SUCCESS).json({
-			message: 'user has been fetched',
+			message: 'User has been fetched',
 			data: user,
 		});
 	};
@@ -39,13 +41,14 @@ class UserController {
 
 		const createUser = await User.create(user);
 		if (createUser.err) {
+			logger.log('app-err', 'Error creating user', createUser.err);
 			res.status(CODE.BAD_REQUEST).json({
 				message: err.message,
 				data: null,
 			});
 		}
 		res.status(CODE.CREATED).json({
-			message: 'user successfully created',
+			message: 'User successfully created',
 			data: createUser,
 		});
 	};
@@ -55,7 +58,7 @@ class UserController {
 		let user = await User.findById(userId);
 		if (user === null) {
 			return res.status(CODE.NOT_FOUND).json({
-				message: 'cannot find user',
+				message: 'User not found',
 				data: null,
 			});
 		}
@@ -67,13 +70,14 @@ class UserController {
 
 		const updateUser = await User.findByIdAndUpdate(userId, user);
 		if (updateUser.err) {
+			logger.log('app-err', 'Error updating user', updateUser.err);
 			res.status(CODE.BAD_REQUEST).json({
 				message: err.message,
 				data: null,
 			});
 		}
 		res.status(CODE.SUCCESS).json({
-			message: `user ${userId} has successfully updated`,
+			message: `User ${userId} successfully updated`,
 			data: user,
 		});
 	};
@@ -83,14 +87,14 @@ class UserController {
 		let user = await User.findById(userId);
 		if (user === null)
 			return res.status(CODE.NOT_FOUND).json({
-				message: 'cannot find user',
+				message: 'User not found',
 				data: null,
 			});
 
 		const deleteUser = await User.findByIdAndDelete(userId, user);
 		if (deleteUser) {
 			res.status(CODE.SUCCESS).json({
-				message: 'user successfully removed',
+				message: 'User successfully removed',
 				data: null,
 			});
 		}
