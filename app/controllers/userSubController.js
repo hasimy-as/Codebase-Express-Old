@@ -17,82 +17,83 @@ class UserController {
 	};
 
 	getOneUser = async (req, res) => {
+		let userId = req.params.id;
+		let user = await User.findById(userId);
+		if (user === null) {
+			return res.status(CODE.NOT_FOUND).json({
+				message: 'cannot find user',
+				data: null,
+			});
+		}
 		res.status(CODE.SUCCESS).json({
 			message: 'user has been fetched',
-			data: res.user,
+			data: user,
 		});
 	};
 
 	createUser = async (req, res) => {
-		const user = new User({
+		const user = {
 			name: req.body.name,
 			address: req.body.address,
-		});
+		};
 
-		const newUser = await user.save();
-		if (newUser.errors) {
+		const createUser = await User.create(user);
+		if (createUser.err) {
 			res.status(CODE.BAD_REQUEST).json({
 				message: err.message,
 				data: null,
 			});
 		}
-
 		res.status(CODE.CREATED).json({
 			message: 'user successfully created',
-			data: newUser,
+			data: createUser,
 		});
 	};
 
 	updateUser = async (req, res) => {
-		if (req.body.name !== null) res.user.name = req.body.name;
-		if (req.body.address !== null) res.user.address = req.body.address;
+		let userId = req.params.id;
+		let user = await User.findById(userId);
+		if (user === null) {
+			return res.status(CODE.NOT_FOUND).json({
+				message: 'cannot find user',
+				data: null,
+			});
+		}
 
-		const updatedUser = await res.user.save();
-		if (updatedUser.err) {
+		user = {
+			name: req.body.name,
+			address: req.body.address,
+		};
+
+		const updateUser = await User.findByIdAndUpdate(userId, user);
+		if (updateUser.err) {
 			res.status(CODE.BAD_REQUEST).json({
 				message: err.message,
 				data: null,
 			});
 		}
-
 		res.status(CODE.SUCCESS).json({
-			message: 'user successfully updated',
-			data: updatedUser,
+			message: `user ${userId} has successfully updated`,
+			data: user,
 		});
 	};
 
-	deleteUser = async (req, res, err) => {
-		if (await res.user.remove()) {
+	deleteUser = async (req, res) => {
+		let userId = req.params.id;
+		let user = await User.findById(userId);
+		if (user === null)
+			return res.status(CODE.NOT_FOUND).json({
+				message: 'cannot find user',
+				data: null,
+			});
+
+		const deleteUser = await User.findByIdAndDelete(userId, user);
+		if (deleteUser) {
 			res.status(CODE.SUCCESS).json({
 				message: 'user successfully removed',
 				data: null,
 			});
-		} else if (err) {
-			res.status(CODE.INTERNAL_ERROR).json({
-				message: err.message,
-				data: null,
-			});
 		}
-	};
-
-	getUser = async (req, res, next) => {
-		let user;
-		try {
-			user = await User.findById(req.params.id);
-			if (user === null)
-				return res.status(CODE.NOT_FOUND).json({
-					message: 'cannot find user',
-					data: null,
-				});
-		} catch (err) {
-			return res.status(CODE.INTERNAL_ERROR).json({
-				message: err.message,
-				data: null,
-			});
-		}
-
-		res.user = user;
-		next();
 	};
 }
 
