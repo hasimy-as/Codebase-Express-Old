@@ -10,7 +10,7 @@ A project template using Express.js as a Node.js framework.
 
 ## Version
 
-Current app version is on v1.1.
+Current app version is on v1.2.
 
 ## Usage
 
@@ -55,6 +55,8 @@ DELETE        {{url}}/api/users/:id
 ```
 
 ## Licensed under [MIT](https://raw.githubusercontent.com/hasimy-as/Expressjs-Project-Template/master/LICENSE)
+
+Want to collaborate? Fork the project and be a collaborator now!
 
 Happy coding!
 
