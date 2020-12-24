@@ -1,117 +1,104 @@
 const User = require('../models/User');
-const { STATUS, CODE } = require('../lib/index.js');
+const logger = require('../lib/logger');
+const { CODE } = require('../lib/index.js');
 
-exports.getUsers = async (req, res) => {
-	try {
+class UserController {
+	getUsers = async (req, res) => {
 		const users = await User.find();
+		if (users.err) {
+			logger.log('app-err', 'Application error', users.err);
+			res.status(CODE.INTERNAL_ERROR).json({
+				message: err.message,
+				data: null,
+			});
+		}
 		res.status(CODE.SUCCESS).json({
-			status: STATUS.SUCCESS,
-			message: 'data successfully fetched',
+			message: 'Success fetching users',
 			data: users,
-			code: CODE.SUCCESS,
 		});
-	} catch (err) {
-		res.status(CODE.INTERNAL_ERROR).json({
-			status: STATUS.INTERNAL_ERROR,
-			message: err.message,
-			data: null,
-			code: CODE.INTERNAL_ERROR,
+	};
+
+	getOneUser = async (req, res) => {
+		let userId = req.params.id;
+		let user = await User.findById(userId);
+		if (user === null) {
+			return res.status(CODE.NOT_FOUND).json({
+				message: 'User not found',
+				data: null,
+			});
+		}
+		res.status(CODE.SUCCESS).json({
+			message: 'User has been fetched',
+			data: user,
 		});
-	}
-};
+	};
 
-exports.getOneUser = async (req, res) => {
-	res.status(CODE.SUCCESS).json({
-		status: STATUS.SUCCESS,
-		message: 'user has been fetched',
-		data: res.user,
-		code: CODE.SUCCESS,
-	});
-};
+	createUser = async (req, res) => {
+		const user = {
+			name: req.body.name,
+			address: req.body.address,
+		};
 
-exports.createUser = async (req, res) => {
-	const user = new User({
-		name: req.body.name,
-		address: req.body.address,
-	});
-	try {
-		const newUser = await user.save();
+		const createUser = await User.create(user);
+		if (createUser.err) {
+			logger.log('app-err', 'Error creating user', createUser.err);
+			res.status(CODE.BAD_REQUEST).json({
+				message: err.message,
+				data: null,
+			});
+		}
 		res.status(CODE.CREATED).json({
-			status: STATUS.CREATED,
-			message: 'user successfully created',
-			data: newUser,
-			code: CODE.CREATED,
+			message: 'User successfully created',
+			data: createUser,
 		});
-	} catch (err) {
-		res.status(CODE.BAD_REQUEST).json({
-			status: STATUS.BAD_REQUEST,
-			message: err.message,
-			data: null,
-			code: CODE.BAD_REQUEST,
-		});
-	}
-};
+	};
 
-exports.updateUser = async (req, res) => {
-	if (req.body.name !== null) res.user.name = req.body.name;
-	if (req.body.address !== null) res.user.address = req.body.address;
-	try {
-		const updatedUser = await res.user.save();
+	updateUser = async (req, res) => {
+		let userId = req.params.id;
+		let user = await User.findById(userId);
+		if (user === null) {
+			return res.status(CODE.NOT_FOUND).json({
+				message: 'User not found',
+				data: null,
+			});
+		}
+
+		user = {
+			name: req.body.name,
+			address: req.body.address,
+		};
+
+		const updateUser = await User.findByIdAndUpdate(userId, user);
+		if (updateUser.err) {
+			logger.log('app-err', 'Error updating user', updateUser.err);
+			res.status(CODE.BAD_REQUEST).json({
+				message: err.message,
+				data: null,
+			});
+		}
 		res.status(CODE.SUCCESS).json({
-			status: STATUS.SUCCESS,
-			message: 'user successfully updated',
-			data: updatedUser,
-			code: CODE.SUCCESS,
+			message: `User ${userId} successfully updated`,
+			data: user,
 		});
-	} catch (err) {
-		res.status(CODE.BAD_REQUEST).json({
-			status: STATUS.BAD_REQUEST,
-			message: err.message,
-			data: null,
-			code: CODE.BAD_REQUEST,
-		});
-	}
-};
+	};
 
-exports.deleteUser = async (req, res) => {
-	try {
-		await res.user.remove();
-		res.status(CODE.SUCCESS).json({
-			status: STATUS.SUCCESS,
-			message: 'user successfully removed',
-			data: null,
-			code: CODE.SUCCESS,
-		});
-	} catch (err) {
-		res.status(CODE.INTERNAL_ERROR).json({
-			status: STATUS.INTERNAL_ERROR,
-			message: err.message,
-			data: null,
-			code: CODE.INTERNAL_ERROR,
-		});
-	}
-};
-
-exports.getUser = async (req, res, next) => {
-	let user;
-	try {
-		user = await User.findById(req.params.id);
+	deleteUser = async (req, res) => {
+		let userId = req.params.id;
+		let user = await User.findById(userId);
 		if (user === null)
 			return res.status(CODE.NOT_FOUND).json({
-				status: STATUS.NOT_FOUND,
-				message: 'cannot find user',
+				message: 'User not found',
 				data: null,
-				code: CODE.NOT_FOUND,
 			});
-	} catch (err) {
-		return res.status(CODE.INTERNAL_ERROR).json({
-			status: STATUS.INTERNAL_ERROR,
-			message: err.message,
-			data: null,
-			code: CODE.INTERNAL_ERROR,
-		});
-	}
 
-	res.user = user;
-	next();
-};
+		const deleteUser = await User.findByIdAndDelete(userId, user);
+		if (deleteUser) {
+			res.status(CODE.SUCCESS).json({
+				message: 'User successfully removed',
+				data: null,
+			});
+		}
+	};
+}
+
+module.exports = UserController;
