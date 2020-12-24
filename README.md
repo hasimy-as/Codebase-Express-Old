@@ -1,5 +1,5 @@
-# Expressjs-Project-Template
-A project template using Express.js as a Node.js framework.
+# Codebase-Express
+A back end project template using Express.js as a Node.js framework.
 
 ## Project Status
 
