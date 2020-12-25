@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { STATUS, CODE } = require('../lib/index');
+const { CODE } = require('../lib/index');
 const logger = require('../lib/logger');
 const env = require('../config/config');
 const db = mongoose.connection;
@@ -12,10 +12,7 @@ const mongoConnect = () => {
 
 	db.on('error', (error) =>
 		logger.log(
-			'app on status ' +
-				CODE.BAD_GATEWAY +
-				' which is ' +
-				STATUS.BAD_GATEWAY,
+			`app is on code ${CODE.BAD_GATEWAY}`,
 			error,
 			'not connected',
 		),
