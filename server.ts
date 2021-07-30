@@ -22,9 +22,9 @@ routes.push(new Routes(app));
 
 app.get('/', (req: Request, res: Response) => {
 	return res.status(CODE.SUCCESS).json({
-    success: true,
+    status: 'success',
     data: 'Hello World',
-		message: 'This server is running properly',
+		message: 'OK',
 		code: CODE.SUCCESS
 	});
 });
@@ -32,7 +32,7 @@ app.get('/', (req: Request, res: Response) => {
 app.get('*', (req: Request, res: Response) => {
 	logError('server', 'Undefined endpoint accessed!', 'Server');
 	return res.status(CODE.NOT_FOUND).json({
-		success: false,
+		status: 'fail',
     data: null,
 		message: 'Cannot get unspecified endpoint',
 		code: CODE.NOT_FOUND

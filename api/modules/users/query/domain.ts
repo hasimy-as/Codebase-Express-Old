@@ -11,7 +11,7 @@ export default class UserQuery {
 
     if (user) {
       return res.status(CODE.SUCCESS).json({
-        success: true,
+        status: 'success',
         data: user,
         message: 'Users successfully fetched',
         code: CODE.SUCCESS
@@ -20,7 +20,7 @@ export default class UserQuery {
 
     logError(ctx, 'Failed to fetch users', 'Users')
     return res.status(CODE.INTERNAL_ERROR).json({
-      success: false,
+      status: 'fail',
       data: [],
       message: 'Failed to fetch users!',
       code: CODE.INTERNAL_ERROR
@@ -33,7 +33,7 @@ export default class UserQuery {
 
     if (user) {
       return res.status(CODE.SUCCESS).json({
-        success: true,
+        status: 'success',
         data: user,
         message: 'User data successfully fetched',
         code: CODE.SUCCESS
@@ -42,7 +42,7 @@ export default class UserQuery {
 
     logError(ctx, 'Failed to fetch user data', 'Users')
     return res.status(CODE.INTERNAL_ERROR).json({
-      success: false,
+      status: 'fail',
       data: {},
       message: 'Failed to fetch user data!',
       code: CODE.INTERNAL_ERROR
