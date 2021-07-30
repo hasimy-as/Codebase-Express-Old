@@ -1,11 +1,12 @@
 {
-  "name": "expressjs-project-template",
+  "name": "codebase-express",
   "version": "1.0.0",
   "description": "A project template using Express.js as a Node.js framework.",
-  "main": "server.js",
+  "main": "server.ts",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
+    "start": "tsc -p . && node dist/server.js",
+    "dev": "nodemon server.ts",
+    "build": "tsc -p .",
     "test": "mocha test/**/**/*.* --timeout=10000 --exit",
     "cover": "nyc mocha test/**/**/*.* --timeout=10000 --recursive --exit"
   },
@@ -14,9 +15,11 @@
     "url": "git+https://github.com/hasimy-as/Expressjs-Project-Template.git"
   },
   "keywords": [
-    "Node",
-    "Express",
-    "Template"
+    "node",
+    "types",
+    "typescript",
+    "express",
+    "template"
   ],
   "author": "Hasimy",
   "license": "MIT",
@@ -25,20 +28,27 @@
   },
   "homepage": "https://github.com/hasimy-as/Expressjs-Project-Template#readme",
   "dependencies": {
-    "chai": "^4.2.0",
-    "confidence": "^5.0.0",
+    "chai": "^4.3.4",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mocha": "^8.2.1",
-    "mongoose": "^5.10.13",
-    "sinon": "^9.2.1",
-    "supertest": "^6.0.1",
-    "winston": "^3.3.3"
+    "mocha": "^9.0.3",
+    "mongoose": "^5.13.4",
+    "sinon": "^11.1.2",
+    "supertest": "^6.1.4",
+    "uuid": "^3.4.0",
+    "winston": "^2.4.5"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/mongoose": "^5.11.97",
+    "@types/winston": "^2.4.4",
     "dotenv": "^8.2.0",
     "istanbul": "^0.4.5",
     "nodemon": "^2.0.6",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
   },
   "nyc": {
     "lines": 80,
