@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 import { Request, Response } from 'express';
 
 import { User } from '../models/User';
@@ -20,7 +21,7 @@ export default class UserProcess {
       });
     }
 
-    const data = await User.create(body);
+    const data = await User.create({ userId: uuid(), ...body });
     if (data) {
       return res.status(CODE.SUCCESS).json({
         status: 'success',
@@ -37,5 +38,40 @@ export default class UserProcess {
       message: 'Failed to create users!',
       code: CODE.INTERNAL_ERROR
     });
+  }
+
+  public static async updateUser(req: Request, res: Response) {
+    const ctx = 'users-updateUser';
+    const { ...body } = req.body;
+    const user = await User.findOne({ userId: req.params.userId });
+
+    if (user) {
+      const data = await User.updateOne({ userId: req.params.userId, ...body });
+      console.log(data)
+      if (data) {
+        return res.status(CODE.SUCCESS).json({
+          status: 'success',
+          data: data,
+          message: 'User has been updated',
+          code: CODE.INTERNAL_ERROR
+        });
+      }
+
+      logError(ctx, 'Failed to update existing user', 'Users')
+      return res.status(CODE.INTERNAL_ERROR).json({
+        status: 'fail',
+        data: {},
+        message: 'Failed to update existing user!',
+        code: CODE.INTERNAL_ERROR
+      });
+    }
+
+    logError(ctx, 'User not found', 'Users')
+      return res.status(CODE.NOT_FOUND).json({
+        status: 'fail',
+        data: {},
+        message: 'User not found!',
+        code: CODE.NOT_FOUND
+      });
   }
 }

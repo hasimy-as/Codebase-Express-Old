@@ -29,7 +29,7 @@ export default class UserQuery {
 
   public static async getUserById(req: Request, res: Response) {
     const ctx = 'users-getUserById';
-    const user = await User.findById({ _id: req.params._id });
+    const user = await User.findOne({ userId: req.params.userId });
 
     if (user) {
       return res.status(CODE.SUCCESS).json({

@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 
 import { CommonRoutes } from '../../helpers/utils/common';
 
@@ -13,8 +13,9 @@ export class Routes extends CommonRoutes {
     routes() {
         // Users
         this.app.route('/api/users').get(UserQuery.getUsers);
-        this.app.route('/api/users/:_id').get(UserQuery.getUserById);
+        this.app.route('/api/users/:userId').get(UserQuery.getUserById);
         this.app.route('/api/users').post(UserProcess.createUser);
+        this.app.route('/api/users/:userId').put(UserProcess.updateUser);
 
         return this.app;
     }
