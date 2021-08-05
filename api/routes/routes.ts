@@ -7,7 +7,7 @@ import UserProcess from '../modules/users/process/domain';
 
 export class Routes extends CommonRoutes {
     constructor(app: express.Application) {
-        super(app, 'UsersRoutes');
+        super(app, 'Routes');
     }
 
     routes() {
@@ -16,6 +16,7 @@ export class Routes extends CommonRoutes {
         this.app.route('/api/users/:userId').get(UserQuery.getUserById);
         this.app.route('/api/users').post(UserProcess.createUser);
         this.app.route('/api/users/:userId').put(UserProcess.updateUser);
+        this.app.route('/api/users/:userId').delete(UserProcess.deleteUser);
 
         return this.app;
     }

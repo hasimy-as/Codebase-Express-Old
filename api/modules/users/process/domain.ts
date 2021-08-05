@@ -27,7 +27,7 @@ export default class UserProcess {
         status: 'success',
         data: data,
         message: 'User has been created',
-        code: CODE.INTERNAL_ERROR
+        code: CODE.SUCCESS
       });
     }
 
@@ -46,14 +46,13 @@ export default class UserProcess {
     const user = await User.findOne({ userId: req.params.userId });
 
     if (user) {
-      const data = await User.updateOne({ userId: req.params.userId, ...body });
-      console.log(data)
-      if (data) {
+      const result = await User.updateOne({ userId: req.params.userId, ...body });
+      if (result) {
         return res.status(CODE.SUCCESS).json({
           status: 'success',
-          data: data,
+          data: result,
           message: 'User has been updated',
-          code: CODE.INTERNAL_ERROR
+          code: CODE.SUCCESS
         });
       }
 
@@ -62,6 +61,39 @@ export default class UserProcess {
         status: 'fail',
         data: {},
         message: 'Failed to update existing user!',
+        code: CODE.INTERNAL_ERROR
+      });
+    }
+
+    logError(ctx, 'User not found', 'Users')
+      return res.status(CODE.NOT_FOUND).json({
+        status: 'fail',
+        data: {},
+        message: 'User not found!',
+        code: CODE.NOT_FOUND
+      });
+  }
+
+  public static async deleteUser(req: Request, res: Response) {
+    const ctx = 'users-deleteUser';
+    const user = await User.findOne({ userId: req.params.userId });
+
+    if (user) {
+      const result = await User.deleteOne({ userId: req.params.userId });
+      if (result) {
+        return res.status(CODE.SUCCESS).json({
+          status: 'success',
+          data: result,
+          message: 'User has been deleted',
+          code: CODE.SUCCESS
+        });
+      }
+
+      logError(ctx, 'Failed to delete user', 'Users')
+      return res.status(CODE.INTERNAL_ERROR).json({
+        status: 'fail',
+        data: {},
+        message: 'Failed to delete existing user!',
         code: CODE.INTERNAL_ERROR
       });
     }

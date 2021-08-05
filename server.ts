@@ -41,8 +41,8 @@ app.get('*', (req: Request, res: Response) => {
 
 server.listen(PORT, async () => {
 	await Database.connect();
-	log('server', `Connected to port:${PORT}`, 'Server');
+	log('server', `Connected to port ${PORT}`, 'Server');
 }).on('error', () => {
-	logError('server', `Server error`, 'Server');
+	logError('server', 'Server error', 'Server');
 	return process.exit(1);
 });
